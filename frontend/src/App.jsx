@@ -4,10 +4,14 @@ import viteLogo from '/vite.svg'
 import './App.css'
 
 function App() {
-  const [students,setStudents] = useState([])
-  const [refresh,setRefresh] = useState(false)
-  const [name,setName] = useState("")
-  const [age,setAge] = useState(0)
+  const [students, setStudents] = useState([]);
+  const [refresh, setRefresh] = useState(false);
+  const [name, setName] = useState("");
+  const [age, setAge] = useState(0);
+  const [updatedName, setUpdatedName] = useState(""); // Separate state for updated name
+  const [updatedAge, setUpdatedAge] = useState(0); // Separate state for updated age
+
+
   useEffect(() => {
     fetch("http://localhost:9292/students")
     .then(res => res.json())
@@ -50,30 +54,30 @@ function App() {
   
   return (
     <>
-    <h1>Student List</h1>
-    <ul>
-      {students.map(student => (
-        <>
-        <li>{student.name}  {student.age}</li>
-        <form onSubmit={(e) => handleSubmit(e,student.id)}>
-          <input
-          placeholder='update name'
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          />
-          <input
-          placeholder='update age'
-          value = {age}
-          onChange={(e) => setAge(e.target.value)}
-          />
-          <button>Update</button>
-        </form>
-        <button onClick={() =>handleDelete(student.id)}>Delete</button>
-        </>
-      ))}
-    </ul>
+      <h1>Student List</h1>
+      <ul>
+        {students.map((student) => (
+          <li key={student.id}>
+            {student.name} {student.age}
+            <form onSubmit={(e) => handleSubmit(e, student.id)}>
+              <input
+                placeholder="update name"
+                value={updatedName} // Use separate state for updated name
+                onChange={(e) => setUpdatedName(e.target.value)} // Update the separate state
+              />
+              <input
+                placeholder="update age"
+                value={updatedAge} // Use separate state for updated age
+                onChange={(e) => setUpdatedAge(e.target.value)} // Update the separate state
+              />
+              <button>Update</button>
+            </form>
+            <button onClick={() => handleDelete(student.id)}>Delete</button>
+          </li>
+        ))}
+      </ul>
     </>
-  )
+  );
 }
 
 export default App
